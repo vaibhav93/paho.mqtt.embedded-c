@@ -3,4 +3,6 @@
 #include "freertos/task.h"
 
 int TimerLeftMS(Timer*);
-char TimerIsExpired(Timer*)
+char TimerIsExpired(Timer*);
+void TimerCountdownMS(Timer*, unsigned int);
+void TimerCountdown(Timer*, unsigned int);

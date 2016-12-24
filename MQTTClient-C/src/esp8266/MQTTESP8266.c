@@ -15,3 +15,14 @@ char TimerIsExpired(Timer *timer)
 {
   return xTaskCheckForTimeOut(&timer->xTimeOut, &timer->xTicksToWait) == pdTRUE;
 }
+
+void TimerCountdownMS(Timer* timer, unsigned int timeout_ms)
+{
+	timer->xTicksToWait = timeout_ms / portTICK_PERIOD_MS; /* convert milliseconds to ticks */
+	vTaskSetTimeOutState(&timer->xTimeOut); /* Record the time at which this function was entered. */
+}
+
+void TimerCountdown(Timer* timer, unsigned int timeout) 
+{
+	TimerCountdownMS(timer, timeout * 1000);
+}
