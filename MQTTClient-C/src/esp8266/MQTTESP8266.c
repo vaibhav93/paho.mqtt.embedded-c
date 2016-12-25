@@ -15,7 +15,7 @@ void TimerInit(Timer* timer)
 int TimerLeftMS(Timer* timer)
 {
 	xTaskCheckForTimeOut(&timer->xTimeOut, &timer->xTicksToWait); /* updates xTicksToWait to the number left */
-	return (timer->xTicksToWait < 0) ? 0 : (timer->xTicksToWait * portTICK_PERIOD_MS);
+	return (timer->xTicksToWait < 0) ? 0 : (timer->xTicksToWait * portTICK_RATE_MS);
 }
 
 char TimerIsExpired(Timer *timer)
@@ -25,7 +25,7 @@ char TimerIsExpired(Timer *timer)
 
 void TimerCountdownMS(Timer* timer, unsigned int timeout_ms)
 {
-	timer->xTicksToWait = timeout_ms / portTICK_PERIOD_MS; /* convert milliseconds to ticks */
+	timer->xTicksToWait = timeout_ms / portTICK_RATE_MS; /* convert milliseconds to ticks */
 	vTaskSetTimeOutState(&timer->xTimeOut); /* Record the time at which this function was entered. */
 }
 
@@ -66,7 +66,7 @@ int ESP8266_write(Network* n, unsigned char* buffer, int len, int timeout_ms)
   FD_SET(n->my_socket,&writeset);
 
   if (lwip_select(n->my_socket + 1, NULL, &writeset, NULL, &tv) > 0 && FD_ISSET(n->my_socket, &writeset)) {
-      sendLen = lwip_write(n->my_socket, buffer, len, 0);
+      sendLen = lwip_write(n->my_socket, buffer, len);
   } else {
     return -1;
   }
@@ -77,7 +77,7 @@ int ESP8266_write(Network* n, unsigned char* buffer, int len, int timeout_ms)
 void ESP8266_disconnect(Network* n)
 {
   n->my_socket = 0;
-	return lwip_close(n->my_socket);
+	lwip_close(n->my_socket);
 }
 
 void NetworkInit(Network* n)
@@ -113,7 +113,7 @@ LOCAL int host2addr(const char *hostname , struct in_addr *in)
     return 0;
 }
 
-int ConnectNetwork(Network* n, const char* host, int port)
+int ConnectNetwork(Network* n, char* host, int port)
 {
     struct sockaddr_in addr;
     int ret;

@@ -8,11 +8,13 @@
 #include "lwip/netdb.h"
 #include "lwip/sys.h"
 
-typedef struct Timer
+typedef struct Timer Timer;
+
+struct Timer
 {
-	TickType_t xTicksToWait;
-	TimeOut_t xTimeOut;
-} Timer;
+	portTickType xTicksToWait;
+	xTimeOutType xTimeOut;
+};
 
 typedef struct Network Network;
 

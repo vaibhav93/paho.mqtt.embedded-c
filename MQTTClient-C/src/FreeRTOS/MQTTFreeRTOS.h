@@ -23,10 +23,10 @@
 #include "semphr.h"
 #include "task.h"
 
-typedef struct Timer 
+typedef struct Timer
 {
-	TickType_t xTicksToWait;
-	TimeOut_t xTimeOut;
+	portTickType xTicksToWait;
+	xTimeOutType xTimeOut;
 } Timer;
 
 typedef struct Network Network;

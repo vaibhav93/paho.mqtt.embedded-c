@@ -58,13 +58,13 @@ void TimerCountdownMS(Timer* timer, unsigned int timeout_ms)
 }
 
 
-void TimerCountdown(Timer* timer, unsigned int timeout) 
+void TimerCountdown(Timer* timer, unsigned int timeout)
 {
 	TimerCountdownMS(timer, timeout * 1000);
 }
 
 
-int TimerLeftMS(Timer* timer) 
+int TimerLeftMS(Timer* timer)
 {
 	xTaskCheckForTimeOut(&timer->xTimeOut, &timer->xTicksToWait); /* updates xTicksToWait to the number left */
 	return (timer->xTicksToWait < 0) ? 0 : (timer->xTicksToWait * portTICK_PERIOD_MS);
@@ -86,8 +86,8 @@ void TimerInit(Timer* timer)
 
 int FreeRTOS_read(Network* n, unsigned char* buffer, int len, int timeout_ms)
 {
-	TickType_t xTicksToWait = timeout_ms / portTICK_PERIOD_MS; /* convert milliseconds to ticks */
-	TimeOut_t xTimeOut;
+	portTickType xTicksToWait = timeout_ms / portTICK_PERIOD_MS; /* convert milliseconds to ticks */
+	xTimeOutType xTimeOut;
 	int recvLen = 0;
 
 	vTaskSetTimeOutState(&xTimeOut); /* Record the time at which this function was entered. */
@@ -112,8 +112,8 @@ int FreeRTOS_read(Network* n, unsigned char* buffer, int len, int timeout_ms)
 
 int FreeRTOS_write(Network* n, unsigned char* buffer, int len, int timeout_ms)
 {
-	TickType_t xTicksToWait = timeout_ms / portTICK_PERIOD_MS; /* convert milliseconds to ticks */
-	TimeOut_t xTimeOut;
+	portTickType xTicksToWait = timeout_ms / portTICK_PERIOD_MS; /* convert milliseconds to ticks */
+	xTimeOutType xTimeOut;
 	int sentLen = 0;
 
 	vTaskSetTimeOutState(&xTimeOut); /* Record the time at which this function was entered. */
